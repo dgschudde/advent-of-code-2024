@@ -29,3 +29,6 @@ go.work.sum
 /.idea/modules.xml
 /.idea/vcs.xml
 /.idea/.gitignore
+/debug/go_build_day_one
+/debug/go_build_day_one_go
+/debug/go_build_day_two

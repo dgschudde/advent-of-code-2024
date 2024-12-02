@@ -18,16 +18,20 @@ func main() {
 
 	input = ReadInput()
 	ConvertInput(input)
-	distance := CalculateDistance()
+	var totalDistance int
+	frequencyMap := checkFrequency(lefts, rights)
+	for _, value := range lefts {
+		totalDistance += value * frequencyMap[value]
+	}
 
-	fmt.Println(distance)
+	fmt.Printf("Total distance is %d\n", totalDistance)
 }
 
 func ReadInput() *[]string {
 	var input = make([]string, 0)
 
 	// Read the input from file
-	inputFile, err := os.Open("./input/test-input.txt")
+	inputFile, err := os.Open("./input/input.txt")
 
 	if err != nil {
 		log.Fatal(err)
@@ -61,20 +65,15 @@ func ConvertInput(input *[]string) {
 	sort.Ints(rights)
 }
 
-func CalculateDistance() int64 {
-	var totalDistance int64
-	var distance int
-
-	for i := 0; i < len(lefts); i++ {
-		left := lefts[i]
-		right := rights[i]
-		if left >= right {
-			distance = left - right
-		} else {
-			distance = right - left
+func checkFrequency(array1, array2 []int) map[int]int {
+	frequencyMap := make(map[int]int)
+	for _, value := range array1 {
+		frequencyMap[value] = 0
+		for _, v := range array2 {
+			if value == v {
+				frequencyMap[value]++
+			}
 		}
-
-		totalDistance += int64(distance)
 	}
-	return totalDistance
+	return frequencyMap
 }
