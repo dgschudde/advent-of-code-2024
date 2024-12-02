@@ -21,10 +21,33 @@ func main() {
 		result := checkSeries(series)
 		if result == "safe" {
 			totalSafeReports++
+		} else {
+			unsafeSeries := convertStringArrayToIntArray(strings.Split(currentLine, " "))
+			if checkUnsafeSeries(unsafeSeries) {
+				totalSafeReports++
+			}
 		}
 	}
 
 	fmt.Printf("Total safe reports: %d\r\n", totalSafeReports)
+}
+
+func checkUnsafeSeries(series []int) bool {
+	var copiedSeries []int = make([]int, len(series))
+
+	for i := 0; i < len(series); i++ {
+		copy(copiedSeries, series)
+		removedSeries := remove(copiedSeries, i)
+		result := checkSeries(removedSeries)
+		if result == "safe" {
+			return true
+		}
+	}
+	return false
+}
+
+func remove(slice []int, s int) []int {
+	return append(slice[:s], slice[s+1:]...)
 }
 
 func convertStringArrayToIntArray(strArray []string) []int {
@@ -45,7 +68,7 @@ func checkSeries(series []int) string {
 	decreasing := false
 
 	for i := 0; i < len(series)-1; i++ {
-		diff := series[i+1] - series[i]
+		var diff = series[i+1] - series[i]
 		if diff > 0 {
 			increasing = true
 		} else if diff < 0 {
