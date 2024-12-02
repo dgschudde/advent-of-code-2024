@@ -8,6 +8,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"commonoperations"
 )
 
 var lefts []int
@@ -16,7 +17,7 @@ var rights []int
 func main() {
 	var input *[]string
 
-	input = ReadInput()
+	input = commonoperations.ReadInput()
 	ConvertInput(input)
 	var totalDistance int
 	frequencyMap := checkFrequency(lefts, rights)
@@ -25,32 +26,6 @@ func main() {
 	}
 
 	fmt.Printf("Total distance is %d\n", totalDistance)
-}
-
-func ReadInput() *[]string {
-	var input = make([]string, 0)
-
-	// Read the input from file
-	inputFile, err := os.Open("./input/input.txt")
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer func(inputFile *os.File) {
-		err := inputFile.Close()
-		if err != nil {
-			log.Fatal(err)
-		}
-	}(inputFile)
-
-	scanner := bufio.NewScanner(inputFile)
-
-	for scanner.Scan() {
-		input = append(input, scanner.Text())
-	}
-
-	return &input
 }
 
 func ConvertInput(input *[]string) {
