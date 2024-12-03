@@ -1,11 +1,8 @@
 package main
 
 import (
-	"bufio"
-	"common"
+	"advent-of-code-2024/common"
 	"fmt"
-	"log"
-	"os"
 	"regexp"
 	"strconv"
 )
@@ -24,7 +21,6 @@ func main() {
 	total := calculateTotal(instructions)
 
 	fmt.Println(total)
-	fmt.Printf("Read %d lines of input", len(*input))
 }
 
 func calculateTotal(instructions []string) int64 {
