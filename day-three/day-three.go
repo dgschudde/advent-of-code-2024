@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"common"
 	"fmt"
 	"log"
 	"os"
@@ -13,7 +14,7 @@ func main() {
 	var input *[]string
 	var inputToString string
 
-	input = ReadInput()
+	input = common.ReadInput()
 
 	for _, currentLine := range *input {
 		inputToString += currentLine
@@ -56,30 +57,4 @@ func matchInstructions(input string) []string {
 	regex := regexp.MustCompile(`mul\(\d+,\d+\)|don't\(\)|do\(\)`)
 	matches := regex.FindAllString(input, -1)
 	return matches
-}
-
-func ReadInput() *[]string {
-	var input = make([]string, 0)
-
-	// Read the input from file
-	inputFile, err := os.Open("./input/input.txt")
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer func(inputFile *os.File) {
-		err := inputFile.Close()
-		if err != nil {
-			log.Fatal(err)
-		}
-	}(inputFile)
-
-	scanner := bufio.NewScanner(inputFile)
-
-	for scanner.Scan() {
-		input = append(input, scanner.Text())
-	}
-
-	return &input
 }
