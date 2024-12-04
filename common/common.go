@@ -6,11 +6,11 @@ import (
 	"os"
 )
 
-func ReadInput() *[]string {
+func ReadInput(fileName string) *[]string {
 	var input = make([]string, 0)
 
 	// Read the input from file
-	inputFile, err := os.Open("./input/input.txt")
+	inputFile, err := os.Open(fileName)
 
 	if err != nil {
 		log.Fatal(err)

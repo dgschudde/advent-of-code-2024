@@ -11,7 +11,7 @@ func main() {
 	var input *[]string
 	var inputToString string
 
-	input = common.ReadInput()
+	input = common.ReadInput("./input/input.txt")
 
 	for _, currentLine := range *input {
 		inputToString += currentLine

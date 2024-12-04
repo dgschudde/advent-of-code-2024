@@ -14,7 +14,7 @@ var rights []int
 func main() {
 	var input *[]string
 
-	input = common.ReadInput()
+	input = common.ReadInput("./input/input.txt")
 	ConvertInput(input)
 	var totalDistance int
 	frequencyMap := checkFrequency(lefts, rights)

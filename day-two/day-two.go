@@ -10,7 +10,7 @@ import (
 func main() {
 	var input *[]string
 
-	input = common.ReadInput()
+	input = common.ReadInput("./input/input.txt")
 
 	var totalSafeReports int
 
