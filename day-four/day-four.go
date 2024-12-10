@@ -12,7 +12,7 @@ func main() {
 	convertedInput := convertInput(*input)
 	occurrences := findOccurrences(convertedInput)
 
-	fmt.Printf("The word XMAS occurred %d times.\r\n", len(occurrences))
+	fmt.Printf("The word MAS forms a cross %d times.\r\n", occurrences)
 }
 
 func convertInput(input []string) [][]rune {
@@ -23,42 +23,26 @@ func convertInput(input []string) [][]rune {
 	return convertedInput
 }
 
-type Coordinate struct {
-	Row int
-	Col int
-}
-
-func findOccurrences(grid [][]rune) []Coordinate {
-	var occurrences []Coordinate
+func findOccurrences(grid [][]rune) int {
+	var count int
 	word := []rune("MAS")
-
-	directions := [][2]int{
-		{1, 1},   // diagonal down-right
-		{-1, -1}, // diagonal up-left
-		{-1, 1},  // diagonal up-right
-		{1, -1},  // diagonal down-left
-	}
 
 	for i := 0; i < len(grid); i++ {
 		for j := 0; j < len(grid[i]); j++ {
-			for _, dir := range directions {
-				if checkWord(grid, i, j, dir, word) {
-					occurrences = append(occurrences, Coordinate{i, j})
-				}
+			if checkWord(grid, i, j, word) {
+				count++
 			}
 		}
 	}
 
-	return occurrences
+	return count
 }
 
-func checkWord(grid [][]rune, row, col int, dir [2]int, word []rune) bool {
-	for k := 0; k < len(word); k++ {
-		newRow := row + k*dir[0]
-		newCol := col + k*dir[1]
-		if newRow < 0 || newRow >= len(grid) || newCol < 0 || newCol >= len(grid[0]) || (k == 1 && grid[newRow][newCol] != word[k]) || (k != 1 && grid[newRow][newCol] != word[k]) {
-			return false
+func checkWord(grid [][]rune, row, col int, word []rune) bool {
+	if row-1 >= 0 && row+1 < len(grid) && col-1 >= 0 && col+1 < len(grid[0]) {
+		if grid[row-1][col] == word[0] && grid[row][col-1] == word[0] && grid[row][col] == word[1] && grid[row][col+1] == word[2] && grid[row+1][col] == word[2] {
+			return true
 		}
 	}
-	return true
+	return false
 }
