@@ -30,17 +30,13 @@ type Coordinate struct {
 
 func findOccurrences(grid [][]rune) []Coordinate {
 	var occurrences []Coordinate
-	word := []rune("XMAS")
+	word := []rune("MAS")
 
 	directions := [][2]int{
-		{0, 1},   // horizontal right
-		{0, -1},  // horizontal left
-		{1, 0},   // vertical down
-		{-1, 0},  // vertical up
 		{1, 1},   // diagonal down-right
-		{1, -1},  // diagonal down-left
-		{-1, 1},  // diagonal up-right
 		{-1, -1}, // diagonal up-left
+		{-1, 1},  // diagonal up-right
+		{1, -1},  // diagonal down-left
 	}
 
 	for i := 0; i < len(grid); i++ {
@@ -60,7 +56,7 @@ func checkWord(grid [][]rune, row, col int, dir [2]int, word []rune) bool {
 	for k := 0; k < len(word); k++ {
 		newRow := row + k*dir[0]
 		newCol := col + k*dir[1]
-		if newRow < 0 || newRow >= len(grid) || newCol < 0 || newCol >= len(grid[0]) || (k == 1 && grid[newRow][newCol] != word[k] && grid[newRow][newCol] != 'X') || (k != 1 && grid[newRow][newCol] != word[k]) {
+		if newRow < 0 || newRow >= len(grid) || newCol < 0 || newCol >= len(grid[0]) || (k == 1 && grid[newRow][newCol] != word[k]) || (k != 1 && grid[newRow][newCol] != word[k]) {
 			return false
 		}
 	}
