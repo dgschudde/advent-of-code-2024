@@ -3,8 +3,6 @@ package main
 import (
 	"advent-of-code-2024/common"
 	"fmt"
-	"math"
-	"runtime/debug"
 	"strconv"
 	"strings"
 )
@@ -28,13 +26,10 @@ func (ss Rule) String() string {
 }
 
 func main() {
-	debug.SetGCPercent(-1)
-	debug.SetMemoryLimit(math.MaxInt64)
-
 	var input *[]string
 	input = common.ReadInput("./input/input.txt")
 
-	var stones = make([]uint64, math.MaxInt32)
+	var stones []uint64
 
 	stones = convertInput(*input)
 	refStones := &stones
@@ -69,22 +64,18 @@ func CalculateStones(stones *[]uint64) int {
 			}
 			delta = 0
 
-			//fmt.Printf("Blink: %d, stone: %d\r\n", blink, refStones[i])
 			var rule = CheckRuleApplies(refStones[i])
-			//fmt.Printf("Rule: %s\r\n", rule)
 			switch rule {
 			case Swap:
-				stones = SwapValue(stones, i)
+				SwapValue(stones, i)
 			case Multiply:
-				stones = MultiplyValue(stones, i)
+				MultiplyValue(stones, i)
 			case Split:
 				stones, delta = SplitValues(stones, i)
 			default:
 				panic("Rule doesn't exist")
 			}
 		}
-
-		//fmt.Println()
 	}
 
 	return len(*stones)
@@ -106,16 +97,12 @@ func IsEven(stone uint64) bool {
 
 func SwapValue(numbers *[]uint64, index int) *[]uint64 {
 	refNumbers := *numbers
-	//fmt.Printf("Swap %d for 1\r\n", refNumbers[index])
-
 	refNumbers[index] = 1
 	return &refNumbers
 }
 
 func MultiplyValue(numbers *[]uint64, index int) *[]uint64 {
 	refNumbers := *numbers
-	//fmt.Printf("Multiply %d with 2024\r\n", refNumbers[index])
-
 	v := refNumbers[index] * 2024
 	refNumbers[index] = v
 	return &refNumbers
@@ -137,7 +124,6 @@ func SplitValues(numbers *[]uint64, index int) (*[]uint64, int) {
 	refNumbers = insert(&refNumbers, index, left)
 	refNumbers = insert(&refNumbers, index+1, right)
 
-	//fmt.Printf("Split value %d for into: %d and %d\r\n", refNumbers[index], left, right)
 	return &refNumbers, 1
 }
 
