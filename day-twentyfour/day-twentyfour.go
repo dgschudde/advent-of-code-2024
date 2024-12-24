@@ -12,7 +12,18 @@ func main() {
 	input := common.ReadInput("input/input.txt")
 	wireValues, gateConnections := parseWireValues(*input)
 
+	initialConnections := make([]string, 0)
+	remainingConnections := make([]string, 0)
 	for _, connection := range gateConnections {
+		parts := strings.Split(connection, " ")
+		if strings.HasPrefix(parts[0], "x") || strings.HasPrefix(parts[0], "y") || strings.HasPrefix(parts[2], "x") || strings.HasPrefix(parts[2], "y") {
+			initialConnections = append(initialConnections, connection)
+		} else {
+			remainingConnections = append(remainingConnections, connection)
+		}
+	}
+
+	for _, connection := range initialConnections {
 		parts := strings.Split(connection, " ")
 		input1 := wireValues[parts[0]]
 		input2 := wireValues[parts[2]]
@@ -29,26 +40,39 @@ func main() {
 	}
 
 	// Process remaining gate connections sorted by output in alphabetical order
-	sort.Slice(gateConnections, func(i, j int) bool {
-		partsI := strings.Split(gateConnections[i], " ")
-		partsJ := strings.Split(gateConnections[j], " ")
+	sort.Slice(remainingConnections, func(i, j int) bool {
+		partsI := strings.Split(remainingConnections[i], " ")
+		partsJ := strings.Split(remainingConnections[j], " ")
 		return partsI[4] < partsJ[4]
 	})
 
-	for _, connection := range gateConnections {
-		parts := strings.Split(connection, " ")
-		input1 := wireValues[parts[0]]
-		input2 := wireValues[parts[2]]
-		output := parts[4]
+	processedConnections := make(map[string]bool)
+	for len(remainingConnections) > 0 {
+		unprocessedConnections := make([]string, 0)
+		for _, connection := range remainingConnections {
+			parts := strings.Split(connection, " ")
+			input1, input1Exists := wireValues[parts[0]]
+			input2, input2Exists := wireValues[parts[2]]
+			output := parts[4]
 
-		switch parts[1] {
-		case "AND":
-			wireValues[output] = andGate(input1, input2)
-		case "OR":
-			wireValues[output] = orGate(input1, input2)
-		case "XOR":
-			wireValues[output] = xorGate(input1, input2)
+			if input1Exists && input2Exists {
+				switch parts[1] {
+				case "AND":
+					wireValues[output] = andGate(input1, input2)
+				case "OR":
+					wireValues[output] = orGate(input1, input2)
+				case "XOR":
+					wireValues[output] = xorGate(input1, input2)
+				}
+				processedConnections[connection] = true
+			} else {
+				unprocessedConnections = append(unprocessedConnections, connection)
+			}
 		}
+		if len(unprocessedConnections) == len(remainingConnections) {
+			break
+		}
+		remainingConnections = unprocessedConnections
 	}
 
 	outputBits := ""
